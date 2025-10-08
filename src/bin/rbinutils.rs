@@ -1,4 +1,5 @@
 use std::{env, fs, process::Command};
+use std::path::PathBuf;
 
 const VERSION: &str = "binutils-rs 0.1.0 (multi-call binary)";
 
@@ -40,7 +41,10 @@ fn main() {
         }
         Some(cmd) => {
             if functions.contains(&cmd.to_string()) {
-                let status = Command::new(format!("target/debug/{cmd}"))
+                // 确保调用的是项目内的子命令
+                let target_dir = std::env::var("CARGO_TARGET_DIR").unwrap_or_else(|_| "target/debug".to_string());
+                let cmd_path = PathBuf::from(target_dir).join(cmd);
+                let status = Command::new(cmd_path)
                     .args(args)
                     .status();
                 match status {
