@@ -1,12 +1,6 @@
-use std::{env, process::Command};
+use std::{env, fs, process::Command};
 
 const VERSION: &str = "binutils-rs 0.1.0 (multi-call binary)";
-
-const FUNCTIONS: &[&str] = &[
-    "strings",
-    "objdump",
-    // 可以继续加入其他命令
-];
 
 fn print_usage() {
     println!("{VERSION}\n");
@@ -15,26 +9,38 @@ fn print_usage() {
     println!("Options:");
     println!("      --list    lists all defined functions, one per row\n");
     println!("Currently defined functions:\n");
-    for func in FUNCTIONS {
-        println!("    {func}");
-    }
 }
 
-fn print_functions() {
-    for func in FUNCTIONS {
-        println!("{func}");
+fn load_functions() -> Vec<String> {
+    let mut functions = Vec::new();
+    if let Ok(entries) = fs::read_dir("src/tc") {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                let path = entry.path();
+                if path.is_dir() {
+                    if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+                        functions.push(name.to_string());
+                    }
+                }
+            }
+        }
     }
+    functions
 }
 
 fn main() {
+    let functions = load_functions();
     let mut args = env::args().skip(1);
     match args.next().as_deref() {
         None => print_usage(),
-        Some("--list") => print_functions(),
+        Some("--list") => {
+            for func in &functions {
+                println!("{func}");
+            }
+        }
         Some(cmd) => {
-            if FUNCTIONS.contains(&cmd) {
-                // 执行 src/命令名/target/release/命令名
-                let status = Command::new(cmd)
+            if functions.contains(&cmd.to_string()) {
+                let status = Command::new(format!("target/debug/{cmd}"))
                     .args(args)
                     .status();
                 match status {
