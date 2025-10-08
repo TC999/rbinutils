@@ -6,15 +6,18 @@ mod help;
 use args::Args;
 use scan_object::print_strings_in_object_file;
 use scan_plain::print_strings_in_file;
-use help::HELP_TEXT;
+use help::HELP_LINES;
 
 fn main() {
     let raw_args: Vec<String> = std::env::args().collect();
     if raw_args.iter().any(|arg| arg == "-h" || arg == "--help") {
-        println!("{}", HELP_TEXT);
+        for line in HELP_LINES {
+            println!("{}", line);
+        }
         return;
     }
 
+    // 下面保持原样
     let args = Args::parse();
 
     if args.scan_object {
