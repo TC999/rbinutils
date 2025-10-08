@@ -2,6 +2,7 @@
 name = "rbinutils"
 version = "0.1.0"
 edition = "2024"
+default-run = "rbinutils"
 
 [workspace]
 resolver = "3"
@@ -9,9 +10,8 @@ members = [
 "src/tc/*"
 ]
 
+[workspace.metadata]
+target-dir = "target"
+
 [dependencies]
 strings = {optional = true, version = "*", package = "strings", path = "src/tc/strings"}
-
-[[bin]]
-name = "rbinutils"
-path = "src/bin/rbinutils.rs"
