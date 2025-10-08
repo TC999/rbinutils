@@ -26,7 +26,7 @@ pub fn dispatch(matches: &ArgMatches) -> io::Result<()> {
     let obj = File::parse(&*data)
         .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, format!("解析目标文件失败: {}", e)))?;
 
-    if matches.get_flag("archive-headers") { dump_archive_headers(&obj); }
+    if matches.get_flag("archive-headers") { dump_archive_headers(&data); }
     if matches.get_flag("file-headers") { dump_file_header(&obj); }
     //if matches.get_flag("private-headers") { dump_private_headers(&obj); }
     //if let Some(opt) = matches.get_one::<String>("private") { dump_private(&obj, opt); }
@@ -78,7 +78,7 @@ pub fn dispatch(matches: &ArgMatches) -> io::Result<()> {
         && !matches.get_flag("reloc")
         && !matches.get_flag("dynamic-reloc");
     if no_flag {
-        print_usage();
+        //print_usage();
     }
     Ok(())
 }
