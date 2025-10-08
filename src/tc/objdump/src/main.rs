@@ -2,7 +2,7 @@ use clap::{Arg, Command};
 use object::{Object, ObjectSection, ObjectSymbol, File};
 use std::fs;
 use std::path::Path;
-use std::io::{self, Write};
+use std::io::{self};
 
 /// 显示文件头信息
 fn dump_file_header(obj: &File<'_>) {
