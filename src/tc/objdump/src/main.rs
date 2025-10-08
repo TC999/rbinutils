@@ -1,10 +1,9 @@
 mod cmd;
 mod display;
+mod dispatch;
 mod feature;
 
 use crate::cmd::parse_args;
-use crate::display::*;
-use crate::feature::*;
 use std::io;
 
 fn main() -> io::Result<()> {

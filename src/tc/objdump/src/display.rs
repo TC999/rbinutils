@@ -1,16 +1,35 @@
 use object::File;
 use object::*;
+use object::read::archive::ArchiveFile;
 
-pub fn dump_archive_headers(_obj: &File<'_>) {
-    println!("(暂未实现归档头部显示)");
+/// 显示归档头信息
+pub fn dump_archive_headers(data: &[u8]) {
+    match ArchiveFile::parse(data) {
+        Ok(archive) => {
+            println!("归档成员数: {}", archive.members().count());
+            for (i, member_result) in archive.members().enumerate() {
+                match member_result {
+                    Ok(member) => {
+                        // name() 返回 &[u8]
+                        let name_bytes = member.name();
+                        // 尝试将 &[u8] 转为字符串
+                        let name_str = std::str::from_utf8(name_bytes).unwrap_or("未知");
+                        println!("成员 {}: 名称={}", i + 1, name_str);
+                    }
+                    Err(_) => {
+                        println!("成员 {}: 解析失败", i + 1);
+                    }
+                }
+            }
+        }
+        Err(_) => {
+            println!("该文件不是归档文件或暂不支持归档格式。");
+        }
+    }
 }
 
-// 其它原来的显示函数都放这里
-// pub fn dump_file_header(obj: &File<'_>) { ... }
-// pub fn dump_section_headers(obj: &File<'_>) { ... }
-// ...
-
-fn dump_file_header(obj: &File<'_>) {
+/// 显示文件头信息
+pub fn dump_file_header(obj: &File<'_>) {
     println!("文件架构: {:?}", obj.architecture());
     println!("文件类型: {:?}", obj.kind());
     println!("字节序: {:?}", obj.endianness());
