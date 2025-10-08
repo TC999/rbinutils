@@ -5,3 +5,10 @@ version = 4
 [[package]]
 name = "rbinutils"
 version = "0.1.0"
+dependencies = [
+ "strings",
+]
+
+[[package]]
+name = "strings"
+version = "0.1.0"
