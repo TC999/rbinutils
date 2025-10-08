@@ -12,5 +12,7 @@ fn main() -> io::Result<()> {
     // 参数分发逻辑
     // 例如：if matches.archive_headers { dump_archive_headers(...) }
     // 其它分发同原来 main 函数
+    dispatch::dispatch(&matches)?;
+
     Ok(())
 }
