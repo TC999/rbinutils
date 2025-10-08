@@ -1,15 +1,17 @@
 pub struct Args {
     pub filename: String,
     pub min_len: usize,
+    pub scan_object: bool,
 }
 
 impl Args {
     pub fn parse() -> Self {
         let mut min_len = 4usize;
+        let mut scan_object = false;
         let args: Vec<String> = std::env::args().collect();
 
         if args.len() < 2 {
-            eprintln!("用法: strings <filename> [-n min_len]");
+            eprintln!("用法: strings <filename> [-n min_len] [-d]");
             std::process::exit(1);
         }
         let mut file_arg = "";
@@ -22,6 +24,9 @@ impl Args {
                         i += 1;
                     }
                 }
+                "-d" => {
+                    scan_object = true;
+                }
                 filename => {
                     file_arg = filename;
                 }
@@ -31,6 +36,7 @@ impl Args {
         Args {
             filename: file_arg.to_string(),
             min_len,
+            scan_object,
         }
     }
 }

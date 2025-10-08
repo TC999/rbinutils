@@ -23,7 +23,8 @@ pub fn print_strings_in_object_file<P: AsRef<Path>>(path: P, min_len: usize) -> 
                 } else {
                     if current.len() >= min_len {
                         let s = String::from_utf8_lossy(&current);
-                        println!("{}:{} {}", path.as_ref().display(), section.name().unwrap_or(""), s);
+                        // 只输出字符串内容，不输出路径和段名
+                        println!("{}", s);
                         found = true;
                     }
                     current.clear();
@@ -31,7 +32,8 @@ pub fn print_strings_in_object_file<P: AsRef<Path>>(path: P, min_len: usize) -> 
             }
             if current.len() >= min_len {
                 let s = String::from_utf8_lossy(&current);
-                println!("{}:{} {}", path.as_ref().display(), section.name().unwrap_or(""), s);
+                // 只输出字符串内容，不输出路径和段名
+                println!("{}", s);
                 found = true;
             }
         }
