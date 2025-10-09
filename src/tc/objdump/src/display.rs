@@ -63,3 +63,16 @@ pub fn dump_all_headers(obj: &File<'_>) {
     dump_section_headers(obj);
     // 其它头部按需增加
 }
+
+pub fn dump_symbols(obj: &File<'_>) {
+    println!("暂未实现符号表显示");
+    //for symbol in obj.symbols() {
+    //    println!(
+    //        "名称: {:<20} 类型: {:?} 地址: 0x{:08x} 大小: 0x{:x}",
+    //        symbol.name().unwrap_or("未知"),
+    //        symbol.kind(),
+    //        symbol.address(),
+    //        symbol.size()
+    //    );
+    //}
+}

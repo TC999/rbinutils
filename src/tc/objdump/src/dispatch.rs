@@ -47,7 +47,7 @@ pub fn dispatch(matches: &ArgMatches) -> io::Result<()> {
     if matches.get_flag("process-links") { dump_process_links(&obj); }
     if let Some(sect) = matches.get_one::<String>("ctf") { dump_ctf(&obj, Some(sect)); }
     if let Some(sect) = matches.get_one::<String>("sframe") { dump_sframe(&obj, Some(sect)); }
-    //if matches.get_flag("syms") { dump_symbols(&obj, false); }
+    if matches.get_flag("syms") { dump_symbols(&obj); }
     //if matches.get_flag("dynamic-syms") { dump_symbols(&obj, true); }
     //if matches.get_flag("reloc") { dump_reloc(&obj, false); }
     //if matches.get_flag("dynamic-reloc") { dump_reloc(&obj, true); }
