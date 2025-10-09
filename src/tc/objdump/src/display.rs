@@ -36,16 +36,16 @@ pub fn dump_file_header(obj: &File<'_>) {
     println!("入口地址: 0x{:x}", obj.entry());
 }
 
-fn dump_private_headers(_obj: &File<'_>) {
+pub fn dump_private_headers(_obj: &File<'_>) {
     // TODO: 私有头部显示，object crate暂不支持
     println!("(暂未实现目标格式专用头部显示)");
 }
 
-fn dump_private(_obj: &File<'_>, opt: &str) {
+pub fn dump_private(_obj: &File<'_>, opt: &str) {
     println!("(暂未实现 -P/--private: {})", opt);
 }
 
-fn dump_section_headers(obj: &File<'_>) {
+pub fn dump_section_headers(obj: &File<'_>) {
     println!("段信息:");
     for section in obj.sections() {
         println!(
@@ -58,7 +58,7 @@ fn dump_section_headers(obj: &File<'_>) {
     }
 }
 
-fn dump_all_headers(obj: &File<'_>) {
+pub fn dump_all_headers(obj: &File<'_>) {
     dump_file_header(obj);
     dump_section_headers(obj);
     // 其它头部按需增加
