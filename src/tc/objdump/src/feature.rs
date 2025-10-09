@@ -1,5 +1,6 @@
 use object::File;
 use object::*;
+use capstone::prelude::*;
 
 // 反汇编等功能
 //pub fn dump_disassemble(_obj: &File<'_>, _all: bool, _sym: Option<&str>, _source: bool, _source_comment: Option<&str>) {
@@ -8,9 +9,33 @@ use object::*;
 
 // 其它高级或扩展功能也放这里
 
-pub fn dump_disassemble(_obj: &File<'_>, _all: bool, _sym: Option<&str>, _source: bool, _source_comment: Option<&str>) {
-    // TODO: 用capstone/iced-x86等库实现反汇编
-    println!("(暂未实现反汇编功能)");
+pub fn dump_disassemble(obj: &File<'_>, all: bool, sym: Option<&str>, source: bool, source_comment: Option<&str>) {
+    // 初始化 Capstone 反汇编器
+    let cs = Capstone::new()
+        .x86()
+        .mode(arch::x86::ArchMode::Mode64)
+        .build()
+        .expect("无法初始化 Capstone 反汇编器");
+
+    for section in obj.sections() {
+        let name = section.name().unwrap_or("未知");
+        println!("反汇编段: {}", name);
+
+        if let Ok(data) = section.data() {
+            match cs.disasm_all(data, 0x1000) {
+                Ok(insns) => {
+                    for insn in insns.iter() {
+                        println!("0x{:x}:	{}	{}", insn.address(), insn.mnemonic().unwrap_or(""), insn.op_str().unwrap_or(""));
+                    }
+                }
+                Err(err) => {
+                    println!("反汇编失败: {}", err);
+                }
+            }
+        } else {
+            println!("无法读取段数据");
+        }
+    }
 }
 
 pub fn dump_full_contents(obj: &File<'_>) {
